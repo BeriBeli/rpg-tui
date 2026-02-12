@@ -123,6 +123,3 @@ RPG_SAVE_PATH=./savegame.json
 cargo run
 ```
 
-## TODO 状态
-
-详见 `TODO.zh-CN.md`（已更新：当前 P1/P2/P3 条目均已完成）。

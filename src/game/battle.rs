@@ -16,6 +16,8 @@ pub enum BattleAction {
     Run,
 }
 
+pub const ACTION_COUNT: usize = 6;
+
 pub enum BattleOutcome {
     Continue,
     Escaped,
@@ -37,6 +39,28 @@ pub fn action_from_key(code: KeyCode) -> Option<BattleAction> {
         KeyCode::Char('5') => Some(BattleAction::Ether),
         KeyCode::Char('6') => Some(BattleAction::Run),
         _ => None,
+    }
+}
+
+pub fn action_from_index(index: usize) -> BattleAction {
+    match index % ACTION_COUNT {
+        0 => BattleAction::Attack,
+        1 => BattleAction::FireSlash,
+        2 => BattleAction::Defend,
+        3 => BattleAction::Potion,
+        4 => BattleAction::Ether,
+        _ => BattleAction::Run,
+    }
+}
+
+pub fn action_index(action: BattleAction) -> usize {
+    match action {
+        BattleAction::Attack => 0,
+        BattleAction::FireSlash => 1,
+        BattleAction::Defend => 2,
+        BattleAction::Potion => 3,
+        BattleAction::Ether => 4,
+        BattleAction::Run => 5,
     }
 }
 

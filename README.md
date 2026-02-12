@@ -77,9 +77,12 @@ tests/
   - `6` inn
   - `7` quest board
   - `8` leave town
+  - `Up/Down` + `Enter` select action
 - Settings:
-  - `Up/Down` or `1..5` choose language
-  - `Enter` apply
+  - `Up/Down` move cursor
+  - `1..5` choose language
+  - `6..8` choose difficulty (`Easy` / `Normal` / `Hard`)
+  - `Enter` apply current selection
   - `b` / `Esc` back
 - Battle:
   - `1` attack
@@ -88,6 +91,7 @@ tests/
   - `4` use Potion
   - `5` use Ether
   - `6` run
+  - `Up/Down` + `Enter` select action
 
 ## Run and Test
 
@@ -98,26 +102,8 @@ cargo test
 
 ## Runtime Config
 
-- Language:
-
-```bash
-RPG_LANG=en        # en | zh-CN | zh-TW | ja | ko
-cargo run
-```
-
-- Difficulty profile:
-
-```bash
-RPG_DIFFICULTY=hard
-cargo run
-```
-
-- Custom difficulty config path:
-
-```bash
-RPG_DIFFICULTY_CONFIG=./config/difficulty.toml
-cargo run
-```
+- Language and difficulty are configured in-game from the Settings panel (`o`).
+- Difficulty profile values are loaded from `config/difficulty.toml`.
 
 - Save file path override:
 
@@ -126,6 +112,3 @@ RPG_SAVE_PATH=./savegame.json
 cargo run
 ```
 
-## TODO Status
-
-See `TODO.md` (updated: all current P1/P2/P3 items completed).

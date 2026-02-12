@@ -6,7 +6,7 @@ use rand::SeedableRng;
 use rand::rngs::StdRng;
 use rust_i18n::t;
 
-use crate::game::battle::{self, BattleOutcome};
+use crate::game::battle::{self, BattleAction, BattleOutcome};
 use crate::game::config::{self, DifficultyProfile};
 use crate::game::encounter;
 use crate::game::event;
@@ -20,6 +20,10 @@ use crate::game::town::{self, TownAction, TownOutcome};
 use crate::game::world::generate_world;
 
 const RNG_SALT: u64 = 0x9E37_79B9_7F4A_7C15;
+const LANGUAGE_OPTION_COUNT: usize = Language::ALL.len();
+const DIFFICULTY_OPTION_START: usize = LANGUAGE_OPTION_COUNT;
+const SETTINGS_OPTION_COUNT: usize = LANGUAGE_OPTION_COUNT + Difficulty::ALL.len();
+const TOWN_OPTION_COUNT: usize = 8;
 
 pub struct Game {
     pub mode: GameMode,
@@ -29,8 +33,13 @@ pub struct Game {
     pub battle: Option<Battle>,
     pub log: VecDeque<String>,
     pub should_quit: bool,
+    pub hero_scroll: usize,
+    pub log_scroll: usize,
+    pub controls_scroll: usize,
     pub current_language: Language,
     pub settings_cursor: usize,
+    pub town_cursor: usize,
+    pub battle_cursor: usize,
     pub difficulty: Difficulty,
     pub map_seed: u64,
     pub recent_event: Option<String>,
@@ -43,18 +52,16 @@ pub struct Game {
 
 impl Game {
     pub fn new() -> Self {
-        let initial_language = std::env::var("RPG_LANG")
-            .ok()
-            .as_deref()
-            .map(Language::from_locale_tag)
-            .unwrap_or(Language::En);
-        let (difficulty, profile) = config::active_difficulty();
+        let initial_language = Language::En;
+        let difficulty = Difficulty::Normal;
+        let profile = config::profile_for(difficulty);
         let map_seed = rand::rng().random::<u64>();
         Self::new_with_setup(initial_language, difficulty, profile, map_seed)
     }
 
     pub fn new_with_seed(map_seed: u64) -> Self {
-        let (difficulty, profile) = config::active_difficulty();
+        let difficulty = Difficulty::Normal;
+        let profile = config::profile_for(difficulty);
         Self::new_with_setup(Language::En, difficulty, profile, map_seed)
     }
 
@@ -74,8 +81,13 @@ impl Game {
             battle: None,
             log: VecDeque::new(),
             should_quit: false,
+            hero_scroll: 0,
+            log_scroll: 0,
+            controls_scroll: 0,
             current_language: language,
             settings_cursor: language.index(),
+            town_cursor: 0,
+            battle_cursor: 0,
             difficulty,
             map_seed,
             recent_event: None,
@@ -178,12 +190,17 @@ impl Game {
             battle: self.battle.clone(),
             current_language: self.current_language,
             difficulty: self.difficulty,
+            hero_scroll: self.hero_scroll,
+            log_scroll: self.log_scroll,
+            controls_scroll: self.controls_scroll,
             world: self.world.clone(),
             quest: self.quest.clone(),
             log: self.log.iter().cloned().collect(),
             recent_event: self.recent_event.clone(),
             battle_origin: self.battle_origin,
             settings_cursor: self.settings_cursor,
+            town_cursor: self.town_cursor,
+            battle_cursor: self.battle_cursor,
         }
     }
 
@@ -199,8 +216,19 @@ impl Game {
             battle: save_data.battle,
             log: VecDeque::new(),
             should_quit: false,
+            hero_scroll: save_data.hero_scroll,
+            log_scroll: save_data.log_scroll,
+            controls_scroll: save_data.controls_scroll,
             current_language: save_data.current_language,
-            settings_cursor: save_data.settings_cursor,
+            settings_cursor: save_data
+                .settings_cursor
+                .min(SETTINGS_OPTION_COUNT.saturating_sub(1)),
+            town_cursor: save_data
+                .town_cursor
+                .min(TOWN_OPTION_COUNT.saturating_sub(1)),
+            battle_cursor: save_data
+                .battle_cursor
+                .min(battle::ACTION_COUNT.saturating_sub(1)),
             difficulty: save_data.difficulty,
             map_seed: save_data.map_seed,
             recent_event: save_data.recent_event,
@@ -250,6 +278,19 @@ impl Game {
         }
 
         let action = match code {
+            KeyCode::Up | KeyCode::Char('w') => {
+                if self.town_cursor == 0 {
+                    self.town_cursor = TOWN_OPTION_COUNT - 1;
+                } else {
+                    self.town_cursor -= 1;
+                }
+                None
+            }
+            KeyCode::Down | KeyCode::Char('s') => {
+                self.town_cursor = (self.town_cursor + 1) % TOWN_OPTION_COUNT;
+                None
+            }
+            KeyCode::Enter => Some(town_action_from_cursor(self.town_cursor)),
             KeyCode::Char('1') => Some(TownAction::BuyPotion),
             KeyCode::Char('2') => Some(TownAction::BuyEther),
             KeyCode::Char('3') => Some(TownAction::UpgradeWeapon),
@@ -264,6 +305,7 @@ impl Game {
         let Some(action) = action else {
             return;
         };
+        self.town_cursor = town_cursor_from_action(action);
         match town::apply_action(&mut self.player, &mut self.quest, action) {
             TownOutcome::Stay(message) => {
                 self.recent_event = Some(message.clone());
@@ -280,30 +322,54 @@ impl Game {
         match code {
             KeyCode::Up | KeyCode::Char('w') => {
                 if self.settings_cursor == 0 {
-                    self.settings_cursor = Language::ALL.len() - 1;
+                    self.settings_cursor = SETTINGS_OPTION_COUNT - 1;
                 } else {
                     self.settings_cursor -= 1;
                 }
             }
             KeyCode::Down | KeyCode::Char('s') => {
-                self.settings_cursor = (self.settings_cursor + 1) % Language::ALL.len();
+                self.settings_cursor = (self.settings_cursor + 1) % SETTINGS_OPTION_COUNT;
             }
             KeyCode::Char('1') => self.select_language(0),
             KeyCode::Char('2') => self.select_language(1),
             KeyCode::Char('3') => self.select_language(2),
             KeyCode::Char('4') => self.select_language(3),
             KeyCode::Char('5') => self.select_language(4),
-            KeyCode::Enter => self.select_language(self.settings_cursor),
+            KeyCode::Char('6') => self.select_difficulty(0),
+            KeyCode::Char('7') => self.select_difficulty(1),
+            KeyCode::Char('8') => self.select_difficulty(2),
+            KeyCode::Enter => self.select_setting_at_cursor(),
             KeyCode::Char('b') => self.close_settings(),
             _ => {}
         }
     }
 
     fn handle_battle_key(&mut self, code: KeyCode) {
-        let Some(action) = battle::action_from_key(code) else {
-            return;
+        let action = match code {
+            KeyCode::Up | KeyCode::Char('w') => {
+                if self.battle_cursor == 0 {
+                    self.battle_cursor = battle::ACTION_COUNT - 1;
+                } else {
+                    self.battle_cursor -= 1;
+                }
+                None
+            }
+            KeyCode::Down | KeyCode::Char('s') => {
+                self.battle_cursor = (self.battle_cursor + 1) % battle::ACTION_COUNT;
+                None
+            }
+            KeyCode::Enter => Some(battle::action_from_index(self.battle_cursor)),
+            _ => battle::action_from_key(code),
         };
 
+        let Some(action) = action else {
+            return;
+        };
+        self.battle_cursor = battle::action_index(action);
+        self.resolve_battle_action(action);
+    }
+
+    fn resolve_battle_action(&mut self, action: BattleAction) {
         let Some(mut battle) = self.battle.take() else {
             self.mode = GameMode::Exploration;
             return;
@@ -360,6 +426,7 @@ impl Game {
                 self.player.hp = self.player.max_hp;
                 self.player.mp = self.player.max_mp;
                 self.mode = GameMode::Town;
+                self.town_cursor = 0;
                 self.push_log(t!("log.town.arrived_restore"));
             }
             Tile::Lair => self.start_boss_battle(),
@@ -470,6 +537,7 @@ impl Game {
             defending: false,
         });
         self.mode = GameMode::Battle;
+        self.battle_cursor = 0;
         self.battle_origin = Some(origin);
     }
 
@@ -489,6 +557,7 @@ impl Game {
             defending: false,
         });
         self.mode = GameMode::Battle;
+        self.battle_cursor = 0;
         self.battle_origin = None;
     }
 
@@ -566,6 +635,58 @@ impl Game {
             lang = t!(lang.label_key())
         ));
     }
+
+    fn select_difficulty(&mut self, idx: usize) {
+        if idx >= Difficulty::ALL.len() {
+            return;
+        }
+
+        self.settings_cursor = DIFFICULTY_OPTION_START + idx;
+        let difficulty = Difficulty::ALL[idx];
+        if difficulty == self.difficulty {
+            return;
+        }
+
+        self.difficulty = difficulty;
+        self.difficulty_profile = config::profile_for(difficulty);
+        let message = t!("log.game.difficulty", diff = t!(difficulty.label_key())).to_string();
+        self.recent_event = Some(message.clone());
+        self.push_log(message);
+    }
+
+    fn select_setting_at_cursor(&mut self) {
+        if self.settings_cursor < LANGUAGE_OPTION_COUNT {
+            self.select_language(self.settings_cursor);
+            return;
+        }
+        self.select_difficulty(self.settings_cursor - DIFFICULTY_OPTION_START);
+    }
+}
+
+fn town_action_from_cursor(cursor: usize) -> TownAction {
+    match cursor {
+        0 => TownAction::BuyPotion,
+        1 => TownAction::BuyEther,
+        2 => TownAction::UpgradeWeapon,
+        3 => TownAction::UpgradeArmor,
+        4 => TownAction::Healer,
+        5 => TownAction::Inn,
+        6 => TownAction::QuestBoard,
+        _ => TownAction::Leave,
+    }
+}
+
+fn town_cursor_from_action(action: TownAction) -> usize {
+    match action {
+        TownAction::BuyPotion => 0,
+        TownAction::BuyEther => 1,
+        TownAction::UpgradeWeapon => 2,
+        TownAction::UpgradeArmor => 3,
+        TownAction::Healer => 4,
+        TownAction::Inn => 5,
+        TownAction::QuestBoard => 6,
+        TownAction::Leave => 7,
+    }
 }
 
 #[cfg(test)]
@@ -573,6 +694,7 @@ mod tests {
     use crossterm::event::KeyCode;
 
     use super::Game;
+    use crate::game::model::{Battle, Enemy, EnemyStyle};
     use crate::game::model::{GameMode, Position};
 
     #[test]
@@ -645,5 +767,47 @@ mod tests {
         game.start_boss_battle();
         game.handle_key(KeyCode::Char('1'));
         assert_eq!(game.mode, GameMode::Victory);
+    }
+
+    #[test]
+    fn town_enter_executes_selected_action() {
+        rust_i18n::set_locale("en");
+        let mut game = Game::new_with_seed(99);
+        game.mode = GameMode::Town;
+        game.player.gold = 20;
+        game.player.bag.ether = 0;
+        game.town_cursor = 1;
+
+        game.handle_key(KeyCode::Enter);
+
+        assert_eq!(game.player.bag.ether, 1);
+        assert_eq!(game.player.gold, 8);
+    }
+
+    #[test]
+    fn battle_enter_executes_selected_action() {
+        rust_i18n::set_locale("en");
+        let mut game = Game::new_with_seed(101);
+        game.mode = GameMode::Battle;
+        game.battle_cursor = 0;
+        game.player.base_atk = 999;
+        game.battle = Some(Battle {
+            enemy: Enemy {
+                name: "Dummy".to_string(),
+                hp: 3,
+                max_hp: 3,
+                atk: 1,
+                def: 0,
+                exp_reward: 1,
+                gold_reward: 1,
+                is_boss: false,
+                style: EnemyStyle::Skirmisher,
+            },
+            defending: false,
+        });
+
+        game.handle_key(KeyCode::Enter);
+
+        assert_eq!(game.mode, GameMode::Exploration);
     }
 }

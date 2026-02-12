@@ -18,12 +18,22 @@ pub struct SaveData {
     pub battle: Option<Battle>,
     pub current_language: Language,
     pub difficulty: Difficulty,
+    #[serde(default)]
+    pub hero_scroll: usize,
+    #[serde(default)]
+    pub log_scroll: usize,
+    #[serde(default)]
+    pub controls_scroll: usize,
     pub world: WorldObjects,
     pub quest: QuestState,
     pub log: Vec<String>,
     pub recent_event: Option<String>,
     pub battle_origin: Option<Position>,
     pub settings_cursor: usize,
+    #[serde(default)]
+    pub town_cursor: usize,
+    #[serde(default)]
+    pub battle_cursor: usize,
 }
 
 impl SaveData {
@@ -99,12 +109,17 @@ mod tests {
             battle: None,
             current_language: Language::Ja,
             difficulty: Difficulty::Hard,
+            hero_scroll: 1,
+            log_scroll: 2,
+            controls_scroll: 3,
             world: WorldObjects::new(Vec::new(), Vec::new()),
             quest: QuestState::new(),
             log: vec!["a".to_string(), "b".to_string()],
             recent_event: Some("recent".to_string()),
             battle_origin: Some(Position { x: 7, y: 9 }),
             settings_cursor: 3,
+            town_cursor: 2,
+            battle_cursor: 4,
         };
 
         save_to_path(&save, path.to_string_lossy().as_ref()).expect("save should succeed");
@@ -117,7 +132,12 @@ mod tests {
         assert_eq!(loaded.player.gold, 123);
         assert_eq!(loaded.current_language, Language::Ja);
         assert_eq!(loaded.difficulty, Difficulty::Hard);
+        assert_eq!(loaded.hero_scroll, 1);
+        assert_eq!(loaded.log_scroll, 2);
+        assert_eq!(loaded.controls_scroll, 3);
         assert_eq!(loaded.settings_cursor, 3);
+        assert_eq!(loaded.town_cursor, 2);
+        assert_eq!(loaded.battle_cursor, 4);
         assert_eq!(loaded.recent_event.as_deref(), Some("recent"));
         assert_eq!(loaded.log.len(), 2);
 

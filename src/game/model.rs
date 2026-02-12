@@ -97,11 +97,21 @@ pub enum Difficulty {
 }
 
 impl Difficulty {
+    pub const ALL: [Difficulty; 3] = [Difficulty::Easy, Difficulty::Normal, Difficulty::Hard];
+
     pub fn from_tag(tag: &str) -> Self {
         match tag.to_ascii_lowercase().as_str() {
             "easy" => Self::Easy,
             "hard" => Self::Hard,
             _ => Self::Normal,
+        }
+    }
+
+    pub fn index(self) -> usize {
+        match self {
+            Self::Easy => 0,
+            Self::Normal => 1,
+            Self::Hard => 2,
         }
     }
 

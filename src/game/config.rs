@@ -5,6 +5,8 @@ use serde::Deserialize;
 
 use crate::game::model::Difficulty;
 
+const DEFAULT_DIFFICULTY_CONFIG_PATH: &str = "config/difficulty.toml";
+
 #[derive(Clone, Debug, Deserialize)]
 pub struct DifficultyProfile {
     pub random_encounter_rate_percent: i32,
@@ -86,19 +88,7 @@ fn load_profiles(path: &Path) -> DifficultyProfiles {
     toml::from_str(&content).unwrap_or_else(|_| DifficultyProfiles::defaults())
 }
 
-pub fn active_difficulty() -> (Difficulty, DifficultyProfile) {
-    let difficulty = std::env::var("RPG_DIFFICULTY")
-        .map(|value| Difficulty::from_tag(&value))
-        .unwrap_or(Difficulty::Normal);
-    let config_path = std::env::var("RPG_DIFFICULTY_CONFIG")
-        .unwrap_or_else(|_| "config/difficulty.toml".to_string());
-    let profiles = load_profiles(Path::new(config_path.as_str()));
-    (difficulty, profiles.profile(difficulty))
-}
-
 pub fn profile_for(difficulty: Difficulty) -> DifficultyProfile {
-    let config_path = std::env::var("RPG_DIFFICULTY_CONFIG")
-        .unwrap_or_else(|_| "config/difficulty.toml".to_string());
-    let profiles = load_profiles(Path::new(config_path.as_str()));
+    let profiles = load_profiles(Path::new(DEFAULT_DIFFICULTY_CONFIG_PATH));
     profiles.profile(difficulty)
 }
