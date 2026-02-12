@@ -38,7 +38,7 @@ pub fn apply_battle_rewards(player: &mut Player, enemy: &Enemy) -> Vec<String> {
 #[cfg(test)]
 mod tests {
     use super::apply_battle_rewards;
-    use crate::game::model::{Enemy, Player};
+    use crate::game::model::{Enemy, EnemyStyle, Player};
 
     fn enemy(exp_reward: i32, gold_reward: i32) -> Enemy {
         Enemy {
@@ -50,6 +50,7 @@ mod tests {
             exp_reward,
             gold_reward,
             is_boss: false,
+            style: EnemyStyle::Skirmisher,
         }
     }
 

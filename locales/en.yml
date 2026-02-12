@@ -9,6 +9,8 @@ ui:
     battle: "Battle"
     result: "Result"
     settings: "Settings"
+  banner:
+    recent: "Recent:"
   stats:
     level: "Lv"
     hp: "HP"
@@ -22,18 +24,27 @@ ui:
     bag: "Bag"
     potion_short: "P"
     ether_short: "E"
+    difficulty: "Difficulty"
+    quest: "Quest"
+  quest:
+    none: "Not accepted"
+    progress: "%{progress}"
+    ready: "Ready (%{reward}G)"
+    done: "Completed"
   log:
     no_events: "No events yet."
   exploration:
     tip_1: "Explore the world. H = town, X = dragon lair."
-    tip_2: "Move with arrows/WASD. Floors may trigger battles or events."
-    tip_3: "Press t while on H to open town menu."
+    tip_2: "Move with arrows/WASD. C = chest, N = NPC, ',' = cleared floor."
+    tip_3: "Press t on H for town, k save, l load."
   town:
-    shop_title: "Town Shop"
+    shop_title: "Town Services"
     shop_line_1: "1 Potion (10G)   2 Ether (12G)"
     weapon_upgrade: "3 Weapon Upgrade:"
     armor_upgrade: "4 Armor Upgrade:"
-    leave: "5 Leave town"
+    service_line: "5 Healer (8G)   6 Inn (18G)"
+    quest_line: "7 Quest Board"
+    leave: "8 Leave town"
     offer_with_cost: "%{name} (%{cost}G)"
   common:
     max: "MAX"
@@ -41,6 +52,10 @@ ui:
     title: "Language"
     tip: "Use up/down (or 1..5), Enter to apply, b/Esc to return."
     current: "(current)"
+    current_difficulty: "Difficulty:"
+    diff_easy: "Easy"
+    diff_normal: "Normal"
+    diff_hard: "Hard"
     lang_en: "English"
     lang_zh_cn: "Simplified Chinese"
     lang_zh_tw: "Traditional Chinese"
@@ -58,12 +73,14 @@ ui:
   controls:
     quit: "Quit: q"
     open_settings: "Settings: o"
+    save_load: "Save/Load: k / l"
     exploration:
       move: "Move: arrows / WASD"
       town: "Town menu: t on H"
     town:
-      buy: "Buy/Upgrade: 1..4"
-      leave: "Leave town: 5"
+      buy: "Shop/Upgrade: 1..4"
+      service: "Service/Quest: 5..7"
+      leave: "Leave town: 8"
     battle:
       line_1: "1 Attack, 2 Skill"
       line_2: "3 Defend, 4/5 Item"
@@ -96,7 +113,12 @@ enemy:
 log:
   game:
     welcome: "Welcome, hero. Defeat X (Ancient Dragon)."
-    town_hint: "Town: 1 Potion, 2 Ether, 3 Weapon, 4 Armor, 5 Leave."
+    town_hint: "Town: 1 Potion, 2 Ether, 3 Weapon, 4 Armor, 5 Healer, 6 Inn, 7 Quest, 8 Leave."
+    difficulty: "Current difficulty: %{diff}."
+    saved_to: "Game saved to %{path}."
+    save_failed: "Save failed: %{error}."
+    loaded_from: "Game loaded from %{path}."
+    load_failed: "Load failed: %{error}."
     player_fallen_restart: "You have fallen. Press r to restart."
     dragon_defeated_restart_or_quit: "The dragon is defeated. Press q to quit, r to restart."
   settings:
@@ -117,7 +139,26 @@ log:
     armor_upgrade_unavailable: "Cannot upgrade armor now."
     need_more_gold_armor: "Need %{cost}G for armor upgrade."
     armor_upgraded: "Armor upgraded to %{armor}."
+    healer_not_needed: "Healer says your HP is already full."
+    healer_need_gold: "Healer service costs %{cost}G."
+    healer_restored: "Healer restores HP %{before} -> %{after} for %{cost}G."
+    inn_not_needed: "Inn rest is unnecessary right now."
+    inn_need_gold: "Inn stay costs %{cost}G."
+    inn_restored: "You stayed at the inn for %{cost}G. HP/MP fully restored."
     leaving: "Leaving town."
+  quest:
+    accepted: "Quest accepted: defeat %{target} enemies for %{reward}G."
+    progress: "Quest progress: %{progress}."
+    progress_short: "Quest: %{progress}."
+    completed: "Quest complete (%{progress})! Return for %{reward}G."
+    reward_claimed: "Quest reward claimed: +%{reward}G (%{progress})."
+    already_completed: "Quest already completed."
+  world:
+    chest_opened: "Opened chest: +%{gold}G, Potion x%{potion}, Ether x%{ether}."
+    npc_traveler: "Traveler: The road ahead is dangerous."
+    npc_scout: "Scout: I marked traps near cracked ground."
+    npc_sage: "Sage: Knowledge wins battles before swords do."
+    npc_reward: "NPC shared supplies: +%{gold}G."
   battle:
     wild_appears: "A wild %{enemy} appears!"
     boss_blocks_path: "%{enemy} blocks your path!"
@@ -128,6 +169,12 @@ log:
     escape_success: "You escaped safely."
     escape_failed: "Escape failed."
     enemy_hit: "%{enemy} hits you for %{dmg}."
+    enemy_skill_heavy: "%{enemy} uses Heavy Smash for %{dmg}."
+    enemy_skill_mana_burn: "%{enemy} burns %{mp} MP and deals %{dmg}."
+    enemy_skill_pounce: "%{enemy} pounces twice for %{dmg}."
+    enemy_skill_drain: "%{enemy} drains %{dmg} and heals %{heal}."
+    enemy_skill_flame_breath: "%{enemy} breathes fire for %{dmg}."
+    enemy_skill_tail_sweep: "%{enemy} tail sweep hits for %{dmg}."
   item:
     no_potion: "No Potion left."
     hp_full: "HP is already full."

@@ -6,7 +6,6 @@ use crate::game::balance::{
     EVENT_GOLD_MAX, EVENT_GOLD_MIN, EVENT_GOLD_PER_LEVEL, EVENT_POTION_MAX, EVENT_POTION_MIN,
     EVENT_TRAP_DAMAGE_MAX, EVENT_TRAP_DAMAGE_MIN, EVENT_WEIGHT_CAMPFIRE, EVENT_WEIGHT_ETHER_STASH,
     EVENT_WEIGHT_GOLD_CACHE, EVENT_WEIGHT_POTION_STASH, EVENT_WEIGHT_SPIKE_TRAP,
-    WORLD_EVENT_RATE_PERCENT,
 };
 use crate::game::model::Player;
 
@@ -24,8 +23,12 @@ pub struct WorldEventResult {
     pub player_dead: bool,
 }
 
-pub fn maybe_trigger_event(rng: &mut impl Rng, player: &mut Player) -> Option<WorldEventResult> {
-    if rng.random_range(0..100) >= WORLD_EVENT_RATE_PERCENT {
+pub fn maybe_trigger_event(
+    rng: &mut impl Rng,
+    player: &mut Player,
+    event_rate_percent: i32,
+) -> Option<WorldEventResult> {
+    if rng.random_range(0..100) >= event_rate_percent.clamp(0, 100) {
         return None;
     }
     let kind = roll_event_kind(rng);
@@ -127,7 +130,7 @@ mod tests {
     use rand::SeedableRng;
     use rand::rngs::StdRng;
 
-    use super::{WorldEventKind, apply_event, event_kind_from_roll};
+    use super::{WorldEventKind, apply_event, event_kind_from_roll, maybe_trigger_event};
     use crate::game::balance::{
         EVENT_WEIGHT_CAMPFIRE, EVENT_WEIGHT_ETHER_STASH, EVENT_WEIGHT_GOLD_CACHE,
         EVENT_WEIGHT_POTION_STASH,
@@ -182,5 +185,13 @@ mod tests {
         let result = apply_event(WorldEventKind::SpikeTrap, &mut rng, &mut player);
         assert!(result.player_dead);
         assert_eq!(player.hp, 0);
+    }
+
+    #[test]
+    fn zero_event_rate_never_triggers() {
+        rust_i18n::set_locale("en");
+        let mut rng = StdRng::seed_from_u64(5);
+        let mut player = Player::new();
+        assert!(maybe_trigger_event(&mut rng, &mut player, 0).is_none());
     }
 }

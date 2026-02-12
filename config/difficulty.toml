@@ -1,0 +1,29 @@
+[easy]
+random_encounter_rate_percent = 12
+world_event_rate_percent = 18
+enemy_hp_scale = 0.86
+enemy_atk_scale = 0.85
+enemy_def_scale = 0.90
+enemy_reward_scale = 0.95
+enemy_skill_rate_percent = 16
+run_chance_bonus_percent = 18
+
+[normal]
+random_encounter_rate_percent = 16
+world_event_rate_percent = 14
+enemy_hp_scale = 1.00
+enemy_atk_scale = 1.00
+enemy_def_scale = 1.00
+enemy_reward_scale = 1.00
+enemy_skill_rate_percent = 26
+run_chance_bonus_percent = 0
+
+[hard]
+random_encounter_rate_percent = 21
+world_event_rate_percent = 11
+enemy_hp_scale = 1.22
+enemy_atk_scale = 1.18
+enemy_def_scale = 1.15
+enemy_reward_scale = 1.12
+enemy_skill_rate_percent = 40
+run_chance_bonus_percent = -10

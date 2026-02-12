@@ -9,6 +9,8 @@ ui:
     battle: "战斗"
     result: "结果"
     settings: "设置"
+  banner:
+    recent: "近期事件："
   stats:
     level: "等级"
     hp: "生命"
@@ -22,18 +24,27 @@ ui:
     bag: "背包"
     potion_short: "药"
     ether_short: "蓝"
+    difficulty: "难度"
+    quest: "任务"
+  quest:
+    none: "未接取"
+    progress: "%{progress}"
+    ready: "可领取（%{reward}G）"
+    done: "已完成"
   log:
     no_events: "暂无事件。"
   exploration:
     tip_1: "探索世界。H=城镇，X=龙巢。"
-    tip_2: "使用方向键/WASD 移动。地面可能触发战斗或事件。"
-    tip_3: "站在 H 上按 t 打开城镇菜单。"
+    tip_2: "使用方向键/WASD 移动。C=宝箱，N=NPC，','=已清理地块。"
+    tip_3: "在 H 上按 t 进城镇，按 k 存档，按 l 读档。"
   town:
-    shop_title: "城镇商店"
+    shop_title: "城镇服务"
     shop_line_1: "1 药水 (10G)   2 以太 (12G)"
     weapon_upgrade: "3 武器升级："
     armor_upgrade: "4 护甲升级："
-    leave: "5 离开城镇"
+    service_line: "5 治疗师 (8G)   6 旅店 (18G)"
+    quest_line: "7 任务板"
+    leave: "8 离开城镇"
     offer_with_cost: "%{name} (%{cost}G)"
   common:
     max: "已满级"
@@ -41,6 +52,10 @@ ui:
     title: "语言设置"
     tip: "方向键上下或 1..5 选择，Enter 应用，b/Esc 返回。"
     current: "（当前）"
+    current_difficulty: "当前难度："
+    diff_easy: "简单"
+    diff_normal: "普通"
+    diff_hard: "困难"
     lang_en: "English"
     lang_zh_cn: "简体中文"
     lang_zh_tw: "繁體中文"
@@ -58,12 +73,14 @@ ui:
   controls:
     quit: "退出：q"
     open_settings: "设置：o"
+    save_load: "存档/读档：k / l"
     exploration:
       move: "移动：方向键 / WASD"
       town: "城镇菜单：在 H 上按 t"
     town:
       buy: "购买/升级：1..4"
-      leave: "离开城镇：5"
+      service: "服务/任务：5..7"
+      leave: "离开城镇：8"
     battle:
       line_1: "1 攻击，2 技能"
       line_2: "3 防御，4/5 道具"
@@ -96,7 +113,12 @@ enemy:
 log:
   game:
     welcome: "欢迎，勇者。击败 X（远古巨龙）。"
-    town_hint: "城镇菜单：1 药水，2 以太，3 武器，4 护甲，5 离开。"
+    town_hint: "城镇菜单：1 药水，2 以太，3 武器，4 护甲，5 治疗，6 旅店，7 任务，8 离开。"
+    difficulty: "当前难度：%{diff}。"
+    saved_to: "已保存到 %{path}。"
+    save_failed: "存档失败：%{error}。"
+    loaded_from: "已从 %{path} 读取。"
+    load_failed: "读档失败：%{error}。"
     player_fallen_restart: "你倒下了。按 r 重新开始。"
     dragon_defeated_restart_or_quit: "巨龙已被击败。按 q 退出，按 r 重开。"
   settings:
@@ -117,7 +139,26 @@ log:
     armor_upgrade_unavailable: "当前无法升级护甲。"
     need_more_gold_armor: "护甲升级需要 %{cost}G。"
     armor_upgraded: "护甲已升级为 %{armor}。"
+    healer_not_needed: "治疗师：你的 HP 已经满了。"
+    healer_need_gold: "治疗需要 %{cost}G。"
+    healer_restored: "治疗完成，HP %{before} -> %{after}（花费 %{cost}G）。"
+    inn_not_needed: "目前不需要住店。"
+    inn_need_gold: "旅店住宿需要 %{cost}G。"
+    inn_restored: "你在旅店休息，花费 %{cost}G，HP/MP 全恢复。"
     leaving: "离开城镇。"
+  quest:
+    accepted: "已接取任务：击败 %{target} 个敌人，奖励 %{reward}G。"
+    progress: "任务进度：%{progress}。"
+    progress_short: "任务：%{progress}。"
+    completed: "任务完成（%{progress}）！回城领取 %{reward}G。"
+    reward_claimed: "已领取任务奖励：+%{reward}G（%{progress}）。"
+    already_completed: "任务已完成。"
+  world:
+    chest_opened: "打开宝箱：+%{gold}G，药水 x%{potion}，以太 x%{ether}。"
+    npc_traveler: "旅人：前面的路很危险。"
+    npc_scout: "侦察兵：裂纹地面附近常有陷阱。"
+    npc_sage: "贤者：战斗前的准备胜过临场挥剑。"
+    npc_reward: "NPC 给了你补给：+%{gold}G。"
   battle:
     wild_appears: "野生 %{enemy} 出现了！"
     boss_blocks_path: "%{enemy} 挡住了你的去路！"
@@ -128,6 +169,12 @@ log:
     escape_success: "你成功逃脱了。"
     escape_failed: "逃跑失败。"
     enemy_hit: "%{enemy} 对你造成 %{dmg} 点伤害。"
+    enemy_skill_heavy: "%{enemy} 使用重击，造成 %{dmg} 点伤害。"
+    enemy_skill_mana_burn: "%{enemy} 灼烧你的法力，造成 %{dmg} 伤害并消耗 %{mp} MP。"
+    enemy_skill_pounce: "%{enemy} 连扑两次，合计 %{dmg} 伤害。"
+    enemy_skill_drain: "%{enemy} 吸取 %{dmg} 点并回复 %{heal}。"
+    enemy_skill_flame_breath: "%{enemy} 喷吐烈焰，造成 %{dmg} 点伤害。"
+    enemy_skill_tail_sweep: "%{enemy} 尾扫命中，造成 %{dmg} 点伤害。"
   item:
     no_potion: "没有药水了。"
     hp_full: "HP 已经满了。"

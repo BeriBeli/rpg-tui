@@ -1,5 +1,8 @@
+use crate::game::model::EnemyStyle;
+
 pub struct EnemyTemplate {
     pub name_key: &'static str,
+    pub style: EnemyStyle,
     pub base_hp: i32,
     pub base_atk: i32,
     pub base_def: i32,
@@ -7,12 +10,10 @@ pub struct EnemyTemplate {
     pub base_gold: i32,
 }
 
-pub const RANDOM_ENCOUNTER_RATE_PERCENT: i32 = 16;
-pub const WORLD_EVENT_RATE_PERCENT: i32 = 14;
-
 pub const NORMAL_ENEMIES: [EnemyTemplate; 5] = [
     EnemyTemplate {
         name_key: "enemy.slime",
+        style: EnemyStyle::Skirmisher,
         base_hp: 18,
         base_atk: 6,
         base_def: 1,
@@ -21,6 +22,7 @@ pub const NORMAL_ENEMIES: [EnemyTemplate; 5] = [
     },
     EnemyTemplate {
         name_key: "enemy.goblin",
+        style: EnemyStyle::Brute,
         base_hp: 24,
         base_atk: 8,
         base_def: 2,
@@ -29,6 +31,7 @@ pub const NORMAL_ENEMIES: [EnemyTemplate; 5] = [
     },
     EnemyTemplate {
         name_key: "enemy.wolf",
+        style: EnemyStyle::Predator,
         base_hp: 20,
         base_atk: 10,
         base_def: 2,
@@ -37,6 +40,7 @@ pub const NORMAL_ENEMIES: [EnemyTemplate; 5] = [
     },
     EnemyTemplate {
         name_key: "enemy.skeleton",
+        style: EnemyStyle::Undead,
         base_hp: 26,
         base_atk: 9,
         base_def: 3,
@@ -45,6 +49,7 @@ pub const NORMAL_ENEMIES: [EnemyTemplate; 5] = [
     },
     EnemyTemplate {
         name_key: "enemy.orc_brute",
+        style: EnemyStyle::Caster,
         base_hp: 34,
         base_atk: 12,
         base_def: 4,

@@ -3,7 +3,8 @@ use rand::Rng;
 use rust_i18n::t;
 
 use crate::game::combat;
-use crate::game::model::{Battle, Enemy, Player};
+use crate::game::config::DifficultyProfile;
+use crate::game::model::{Battle, Enemy, EnemyStyle, Player};
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum BattleAction {
@@ -44,6 +45,7 @@ pub fn resolve_turn<R: Rng>(
     battle: &mut Battle,
     player: &mut Player,
     rng: &mut R,
+    difficulty: &DifficultyProfile,
 ) -> TurnResult {
     let mut logs = Vec::new();
     let mut player_acted = false;
@@ -96,7 +98,8 @@ pub fn resolve_turn<R: Rng>(
             }
         }
         BattleAction::Run => {
-            let chance = if battle.enemy.is_boss { 12 } else { 45 };
+            let base = if battle.enemy.is_boss { 12 } else { 45 };
+            let chance = (base + difficulty.run_chance_bonus_percent).clamp(5, 90);
             if rng.random_range(0..100) < chance {
                 logs.push(t!("log.battle.escape_success").to_string());
                 return TurnResult {
@@ -117,21 +120,7 @@ pub fn resolve_turn<R: Rng>(
     }
 
     if player_acted {
-        let raw = combat::random_damage(rng, battle.enemy.atk, player.total_def(), 2);
-        let dealt = if battle.defending {
-            (raw / 2).max(1)
-        } else {
-            raw
-        };
-        player.hp -= dealt;
-        logs.push(
-            t!(
-                "log.battle.enemy_hit",
-                enemy = battle.enemy.name.as_str(),
-                dmg = dealt
-            )
-            .to_string(),
-        );
+        resolve_enemy_action(battle, player, rng, difficulty, &mut logs);
         battle.defending = false;
 
         if player.hp <= 0 {
@@ -146,6 +135,128 @@ pub fn resolve_turn<R: Rng>(
     TurnResult {
         outcome: BattleOutcome::Continue,
         logs,
+    }
+}
+
+fn resolve_enemy_action<R: Rng>(
+    battle: &mut Battle,
+    player: &mut Player,
+    rng: &mut R,
+    difficulty: &DifficultyProfile,
+    logs: &mut Vec<String>,
+) {
+    let special_triggered = rng.random_range(0..100)
+        < DifficultyProfile::clamp_rate(difficulty.enemy_skill_rate_percent);
+
+    match (battle.enemy.style, special_triggered) {
+        (EnemyStyle::Brute, true) => {
+            let raw = combat::random_damage(rng, battle.enemy.atk + 4, player.total_def(), 3);
+            let dealt = apply_defense_guard(raw, battle.defending);
+            player.hp -= dealt;
+            logs.push(
+                t!(
+                    "log.battle.enemy_skill_heavy",
+                    enemy = battle.enemy.name.as_str(),
+                    dmg = dealt
+                )
+                .to_string(),
+            );
+        }
+        (EnemyStyle::Caster, true) => {
+            let raw = combat::random_damage(rng, battle.enemy.atk + 1, player.total_def(), 2);
+            let dealt = apply_defense_guard(raw, battle.defending);
+            player.hp -= dealt;
+            let burn = 3.min(player.mp);
+            player.mp -= burn;
+            logs.push(
+                t!(
+                    "log.battle.enemy_skill_mana_burn",
+                    enemy = battle.enemy.name.as_str(),
+                    dmg = dealt,
+                    mp = burn
+                )
+                .to_string(),
+            );
+        }
+        (EnemyStyle::Predator, true) => {
+            let first = combat::random_damage(rng, battle.enemy.atk + 1, player.total_def(), 2);
+            let second = combat::random_damage(rng, battle.enemy.atk, player.total_def(), 1);
+            let total = apply_defense_guard(first + second, battle.defending);
+            player.hp -= total;
+            logs.push(
+                t!(
+                    "log.battle.enemy_skill_pounce",
+                    enemy = battle.enemy.name.as_str(),
+                    dmg = total
+                )
+                .to_string(),
+            );
+        }
+        (EnemyStyle::Undead, true) => {
+            let raw = combat::random_damage(rng, battle.enemy.atk + 2, player.total_def(), 2);
+            let dealt = apply_defense_guard(raw, battle.defending);
+            player.hp -= dealt;
+            let heal = (dealt / 2).max(1);
+            battle.enemy.hp = (battle.enemy.hp + heal).min(battle.enemy.max_hp);
+            logs.push(
+                t!(
+                    "log.battle.enemy_skill_drain",
+                    enemy = battle.enemy.name.as_str(),
+                    dmg = dealt,
+                    heal = heal
+                )
+                .to_string(),
+            );
+        }
+        (EnemyStyle::Boss, true) => {
+            let breath = rng.random_range(0..100) < 60;
+            if breath {
+                let raw = combat::random_damage(rng, battle.enemy.atk + 6, player.total_def(), 4);
+                let dealt = apply_defense_guard(raw, battle.defending);
+                player.hp -= dealt;
+                logs.push(
+                    t!(
+                        "log.battle.enemy_skill_flame_breath",
+                        enemy = battle.enemy.name.as_str(),
+                        dmg = dealt
+                    )
+                    .to_string(),
+                );
+            } else {
+                let raw = combat::random_damage(rng, battle.enemy.atk + 3, player.total_def(), 2);
+                let dealt = apply_defense_guard(raw, battle.defending);
+                player.hp -= dealt;
+                logs.push(
+                    t!(
+                        "log.battle.enemy_skill_tail_sweep",
+                        enemy = battle.enemy.name.as_str(),
+                        dmg = dealt
+                    )
+                    .to_string(),
+                );
+            }
+        }
+        _ => {
+            let raw = combat::random_damage(rng, battle.enemy.atk, player.total_def(), 2);
+            let dealt = apply_defense_guard(raw, battle.defending);
+            player.hp -= dealt;
+            logs.push(
+                t!(
+                    "log.battle.enemy_hit",
+                    enemy = battle.enemy.name.as_str(),
+                    dmg = dealt
+                )
+                .to_string(),
+            );
+        }
+    }
+}
+
+fn apply_defense_guard(damage: i32, defending: bool) -> i32 {
+    if defending {
+        (damage / 2).max(1)
+    } else {
+        damage.max(1)
     }
 }
 
@@ -187,7 +298,8 @@ mod tests {
     use rand::rngs::StdRng;
 
     use super::{BattleAction, BattleOutcome, action_from_key, resolve_turn};
-    use crate::game::model::{Battle, Enemy, Player};
+    use crate::game::config::profile_for;
+    use crate::game::model::{Battle, Difficulty, Enemy, EnemyStyle, Player};
     use crossterm::event::KeyCode;
 
     fn sample_enemy() -> Enemy {
@@ -200,6 +312,7 @@ mod tests {
             exp_reward: 1,
             gold_reward: 1,
             is_boss: false,
+            style: EnemyStyle::Skirmisher,
         }
     }
 
@@ -223,8 +336,15 @@ mod tests {
             enemy: sample_enemy(),
             defending: false,
         };
+        let profile = profile_for(Difficulty::Normal);
 
-        let result = resolve_turn(BattleAction::FireSlash, &mut battle, &mut player, &mut rng);
+        let result = resolve_turn(
+            BattleAction::FireSlash,
+            &mut battle,
+            &mut player,
+            &mut rng,
+            &profile,
+        );
         assert!(matches!(result.outcome, BattleOutcome::Continue));
         assert_eq!(player.hp, 30);
         assert_eq!(battle.enemy.hp, 20);
@@ -243,8 +363,15 @@ mod tests {
             },
             defending: false,
         };
+        let profile = profile_for(Difficulty::Normal);
 
-        let result = resolve_turn(BattleAction::Attack, &mut battle, &mut player, &mut rng);
+        let result = resolve_turn(
+            BattleAction::Attack,
+            &mut battle,
+            &mut player,
+            &mut rng,
+            &profile,
+        );
         assert!(matches!(result.outcome, BattleOutcome::EnemyDefeated(_)));
     }
 
@@ -261,12 +388,20 @@ mod tests {
                 max_hp: 999,
                 atk: 10,
                 def: 50,
+                style: EnemyStyle::Brute,
                 ..sample_enemy()
             },
             defending: false,
         };
+        let profile = profile_for(Difficulty::Normal);
 
-        let result = resolve_turn(BattleAction::Attack, &mut battle, &mut player, &mut rng);
+        let result = resolve_turn(
+            BattleAction::Attack,
+            &mut battle,
+            &mut player,
+            &mut rng,
+            &profile,
+        );
         assert!(matches!(result.outcome, BattleOutcome::PlayerDefeated));
         assert_eq!(player.hp, 0);
     }

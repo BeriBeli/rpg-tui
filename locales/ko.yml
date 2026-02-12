@@ -9,6 +9,8 @@ ui:
     battle: "전투"
     result: "결과"
     settings: "설정"
+  banner:
+    recent: "최근:"
   stats:
     level: "Lv"
     hp: "HP"
@@ -22,18 +24,27 @@ ui:
     bag: "가방"
     potion_short: "P"
     ether_short: "E"
+    difficulty: "난이도"
+    quest: "퀘스트"
+  quest:
+    none: "미수락"
+    progress: "%{progress}"
+    ready: "보상 수령 가능 (%{reward}G)"
+    done: "완료"
   log:
     no_events: "아직 이벤트가 없습니다."
   exploration:
     tip_1: "세계를 탐험하세요. H=마을, X=드래곤 둥지."
-    tip_2: "방향키/WASD로 이동. 바닥에서 전투나 이벤트가 발생할 수 있습니다."
-    tip_3: "H 위에서 t 를 눌러 마을 메뉴를 엽니다."
+    tip_2: "방향키/WASD 이동. C=상자, N=NPC, ','=정리된 칸."
+    tip_3: "H 위에서 t 마을, k 저장, l 불러오기."
   town:
-    shop_title: "마을 상점"
+    shop_title: "마을 서비스"
     shop_line_1: "1 포션 (10G)   2 에테르 (12G)"
     weapon_upgrade: "3 무기 강화:"
     armor_upgrade: "4 방어구 강화:"
-    leave: "5 마을 나가기"
+    service_line: "5 힐러 (8G)   6 여관 (18G)"
+    quest_line: "7 퀘스트 게시판"
+    leave: "8 마을 나가기"
     offer_with_cost: "%{name} (%{cost}G)"
   common:
     max: "최대"
@@ -41,6 +52,10 @@ ui:
     title: "언어 설정"
     tip: "위/아래 또는 1..5 선택, Enter 적용, b/Esc 돌아가기."
     current: "(현재)"
+    current_difficulty: "현재 난이도:"
+    diff_easy: "Easy"
+    diff_normal: "Normal"
+    diff_hard: "Hard"
     lang_en: "English"
     lang_zh_cn: "简体中文"
     lang_zh_tw: "繁體中文"
@@ -58,12 +73,14 @@ ui:
   controls:
     quit: "종료: q"
     open_settings: "설정: o"
+    save_load: "저장/불러오기: k / l"
     exploration:
       move: "이동: 방향키 / WASD"
       town: "마을 메뉴: H 위에서 t"
     town:
       buy: "구매/강화: 1..4"
-      leave: "마을 나가기: 5"
+      service: "서비스/퀘스트: 5..7"
+      leave: "마을 나가기: 8"
     battle:
       line_1: "1 공격, 2 스킬"
       line_2: "3 방어, 4/5 아이템"
@@ -96,7 +113,12 @@ enemy:
 log:
   game:
     welcome: "환영합니다, 용사여. X(고대 드래곤)를 쓰러뜨리세요."
-    town_hint: "마을: 1 포션, 2 에테르, 3 무기, 4 방어구, 5 나가기."
+    town_hint: "마을: 1 포션, 2 에테르, 3 무기, 4 방어구, 5 힐러, 6 여관, 7 퀘스트, 8 나가기."
+    difficulty: "현재 난이도: %{diff}."
+    saved_to: "%{path} 에 저장했습니다."
+    save_failed: "저장 실패: %{error}."
+    loaded_from: "%{path} 에서 불러왔습니다."
+    load_failed: "불러오기 실패: %{error}."
     player_fallen_restart: "쓰러졌습니다. r 을 눌러 다시 시작하세요."
     dragon_defeated_restart_or_quit: "드래곤을 처치했습니다. q 종료, r 재시작."
   settings:
@@ -117,7 +139,26 @@ log:
     armor_upgrade_unavailable: "지금은 방어구를 강화할 수 없습니다."
     need_more_gold_armor: "방어구 강화에는 %{cost}G가 필요합니다."
     armor_upgraded: "방어구를 %{armor}(으)로 강화했습니다."
+    healer_not_needed: "힐러: HP가 이미 가득 찼습니다."
+    healer_need_gold: "치료에는 %{cost}G가 필요합니다."
+    healer_restored: "치료 완료. HP %{before} -> %{after} (%{cost}G)."
+    inn_not_needed: "지금은 여관이 필요 없습니다."
+    inn_need_gold: "여관 이용에는 %{cost}G가 필요합니다."
+    inn_restored: "여관에서 휴식했습니다 (%{cost}G). HP/MP 완전 회복."
     leaving: "마을을 떠납니다."
+  quest:
+    accepted: "퀘스트 수락: 적 %{target}마리 처치, 보상 %{reward}G."
+    progress: "퀘스트 진행: %{progress}."
+    progress_short: "퀘스트: %{progress}."
+    completed: "퀘스트 완료 (%{progress})! %{reward}G를 받으러 돌아가세요."
+    reward_claimed: "퀘스트 보상 획득: +%{reward}G (%{progress})."
+    already_completed: "이미 완료한 퀘스트입니다."
+  world:
+    chest_opened: "상자를 열었습니다: +%{gold}G, 포션 x%{potion}, 에테르 x%{ether}."
+    npc_traveler: "여행자: 앞길은 위험해요."
+    npc_scout: "정찰병: 갈라진 땅 근처엔 함정이 많아요."
+    npc_sage: "현자: 준비된 자가 검을 들기 전에 이긴다."
+    npc_reward: "NPC가 보급을 나눠줬습니다: +%{gold}G."
   battle:
     wild_appears: "야생의 %{enemy} 이(가) 나타났다!"
     boss_blocks_path: "%{enemy} 이(가) 길을 막아섰다!"
@@ -128,6 +169,12 @@ log:
     escape_success: "무사히 도망쳤습니다."
     escape_failed: "도주 실패."
     enemy_hit: "%{enemy} 의 공격! %{dmg} 피해."
+    enemy_skill_heavy: "%{enemy} 의 강타! %{dmg} 피해."
+    enemy_skill_mana_burn: "%{enemy} 이(가) 마나를 태워 %{dmg} 피해, MP %{mp} 소모."
+    enemy_skill_pounce: "%{enemy} 의 연속 돌진! 총 %{dmg} 피해."
+    enemy_skill_drain: "%{enemy} 의 흡수 공격! %{dmg} 피해, %{heal} 회복."
+    enemy_skill_flame_breath: "%{enemy} 의 화염 숨결! %{dmg} 피해."
+    enemy_skill_tail_sweep: "%{enemy} 의 꼬리 휩쓸기! %{dmg} 피해."
   item:
     no_potion: "포션이 없습니다."
     hp_full: "HP가 이미 가득 찼습니다."
