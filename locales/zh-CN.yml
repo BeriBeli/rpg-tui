@@ -1,0 +1,147 @@
+ui:
+  panel:
+    world: "世界"
+    hero: "勇者"
+    battle_log: "战斗日志"
+    controls: "操作"
+    adventure: "冒险"
+    town: "城镇"
+    battle: "战斗"
+    result: "结果"
+    settings: "设置"
+  stats:
+    level: "等级"
+    hp: "生命"
+    mp: "法力"
+    atk: "攻击"
+    def: "防御"
+    weapon: "武器"
+    armor: "护甲"
+    exp: "经验"
+    gold: "金币"
+    bag: "背包"
+    potion_short: "药"
+    ether_short: "蓝"
+  log:
+    no_events: "暂无事件。"
+  exploration:
+    tip_1: "探索世界。H=城镇，X=龙巢。"
+    tip_2: "使用方向键/WASD 移动。地面可能触发战斗或事件。"
+    tip_3: "站在 H 上按 t 打开城镇菜单。"
+  town:
+    shop_title: "城镇商店"
+    shop_line_1: "1 药水 (10G)   2 以太 (12G)"
+    weapon_upgrade: "3 武器升级："
+    armor_upgrade: "4 护甲升级："
+    leave: "5 离开城镇"
+    offer_with_cost: "%{name} (%{cost}G)"
+  common:
+    max: "已满级"
+  settings:
+    title: "语言设置"
+    tip: "方向键上下或 1..5 选择，Enter 应用，b/Esc 返回。"
+    current: "（当前）"
+    lang_en: "English"
+    lang_zh_cn: "简体中文"
+    lang_zh_tw: "繁體中文"
+    lang_ja: "日本語"
+    lang_ko: "한국어"
+  battle:
+    encounter: "遭遇：%{enemy}"
+    enemy_hp: "敌方生命"
+    action_line_1: "1 攻击  2 火焰斩(-4 MP)  3 防御"
+    action_line_2: "4 药水  5 以太            6 逃跑"
+  result:
+    victory: "胜利！王国得救了。"
+    game_over: "游戏结束。勇者倒下了。"
+    restart_or_quit: "按 r 重新开始，按 q 退出。"
+  controls:
+    quit: "退出：q"
+    open_settings: "设置：o"
+    exploration:
+      move: "移动：方向键 / WASD"
+      town: "城镇菜单：在 H 上按 t"
+    town:
+      buy: "购买/升级：1..4"
+      leave: "离开城镇：5"
+    battle:
+      line_1: "1 攻击，2 技能"
+      line_2: "3 防御，4/5 道具"
+      line_3: "6 逃跑，q 退出"
+    result:
+      restart: "r 重开"
+    settings:
+      line_1: "方向键或 1..5：选择语言"
+      line_2: "Enter：应用语言"
+      line_3: "b/Esc：返回，q：退出"
+
+item:
+  weapon:
+    wooden_sword: "木剑"
+    bronze_sword: "青铜剑"
+    knight_sword: "骑士剑"
+  armor:
+    cloth_armor: "布甲"
+    chain_armor: "锁甲"
+    steel_armor: "钢甲"
+
+enemy:
+  slime: "史莱姆"
+  goblin: "哥布林"
+  wolf: "野狼"
+  skeleton: "骷髅兵"
+  orc_brute: "兽人战士"
+  ancient_dragon: "远古巨龙"
+
+log:
+  game:
+    welcome: "欢迎，勇者。击败 X（远古巨龙）。"
+    town_hint: "城镇菜单：1 药水，2 以太，3 武器，4 护甲，5 离开。"
+    player_fallen_restart: "你倒下了。按 r 重新开始。"
+    dragon_defeated_restart_or_quit: "巨龙已被击败。按 q 退出，按 r 重开。"
+  settings:
+    opened: "已打开设置页面。"
+    language_changed: "语言已切换为 %{lang}。"
+  town:
+    menu_opened: "已打开城镇菜单。"
+    arrived_restore: "抵达城镇。HP/MP 已恢复。"
+    not_enough_gold_potion: "金币不足，无法购买药水（10G）。"
+    bought_potion: "购买药水 x%{count}。"
+    not_enough_gold_ether: "金币不足，无法购买以太（12G）。"
+    bought_ether: "购买以太 x%{count}。"
+    weapon_max: "武器已达到最高等级。"
+    weapon_upgrade_unavailable: "当前无法升级武器。"
+    need_more_gold_weapon: "武器升级需要 %{cost}G。"
+    weapon_upgraded: "武器已升级为 %{weapon}。"
+    armor_max: "护甲已达到最高等级。"
+    armor_upgrade_unavailable: "当前无法升级护甲。"
+    need_more_gold_armor: "护甲升级需要 %{cost}G。"
+    armor_upgraded: "护甲已升级为 %{armor}。"
+    leaving: "离开城镇。"
+  battle:
+    wild_appears: "野生 %{enemy} 出现了！"
+    boss_blocks_path: "%{enemy} 挡住了你的去路！"
+    player_slash: "你对 %{enemy} 造成 %{dmg} 点斩击伤害。"
+    not_enough_mp_fire_slash: "MP 不足，无法使用火焰斩。"
+    fire_slash: "火焰斩命中 %{enemy}，造成 %{dmg} 点伤害。"
+    brace: "你摆出了防御姿态。"
+    escape_success: "你成功逃脱了。"
+    escape_failed: "逃跑失败。"
+    enemy_hit: "%{enemy} 对你造成 %{dmg} 点伤害。"
+  item:
+    no_potion: "没有药水了。"
+    hp_full: "HP 已经满了。"
+    potion_used: "使用药水。HP %{before} -> %{after}。"
+    no_ether: "没有以太了。"
+    mp_full: "MP 已经满了。"
+    ether_used: "使用以太。MP %{before} -> %{after}。"
+  progression:
+    defeated_reward: "击败 %{enemy}。获得 %{exp} EXP，%{gold} G。"
+    level_up: "升级！你现在是 Lv %{level}。"
+  event:
+    gold_cache: "你发现了隐藏金币：+%{gold} G。"
+    potion_stash: "你找到了药水 x%{count}。"
+    ether_stash: "你找到了以太 x%{count}。"
+    campfire_heal: "营火回复生命：%{before} -> %{after}。"
+    spike_trap_deadly: "尖刺陷阱造成 %{dmg} 点伤害。"
+    spike_trap: "尖刺陷阱造成 %{dmg} 点伤害。"

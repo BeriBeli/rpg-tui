@@ -1,0 +1,147 @@
+ui:
+  panel:
+    world: "ワールド"
+    hero: "勇者"
+    battle_log: "バトルログ"
+    controls: "操作"
+    adventure: "冒険"
+    town: "町"
+    battle: "戦闘"
+    result: "結果"
+    settings: "設定"
+  stats:
+    level: "Lv"
+    hp: "HP"
+    mp: "MP"
+    atk: "攻撃"
+    def: "防御"
+    weapon: "武器"
+    armor: "防具"
+    exp: "EXP"
+    gold: "G"
+    bag: "バッグ"
+    potion_short: "P"
+    ether_short: "E"
+  log:
+    no_events: "まだイベントはありません。"
+  exploration:
+    tip_1: "世界を探索しよう。H=町、X=ドラゴンのねぐら。"
+    tip_2: "矢印/WASDで移動。床では戦闘やイベントが発生します。"
+    tip_3: "H の上で t を押すと町メニューを開きます。"
+  town:
+    shop_title: "町のショップ"
+    shop_line_1: "1 ポーション (10G)   2 エーテル (12G)"
+    weapon_upgrade: "3 武器強化:"
+    armor_upgrade: "4 防具強化:"
+    leave: "5 町を出る"
+    offer_with_cost: "%{name} (%{cost}G)"
+  common:
+    max: "最大"
+  settings:
+    title: "言語設定"
+    tip: "上下キーまたは 1..5 で選択、Enter で適用、b/Esc で戻る。"
+    current: "（現在）"
+    lang_en: "English"
+    lang_zh_cn: "简体中文"
+    lang_zh_tw: "繁體中文"
+    lang_ja: "日本語"
+    lang_ko: "한국어"
+  battle:
+    encounter: "遭遇: %{enemy}"
+    enemy_hp: "敵HP"
+    action_line_1: "1 攻撃  2 ファイアスラッシュ(-4 MP)  3 防御"
+    action_line_2: "4 ポーション  5 エーテル          6 逃走"
+  result:
+    victory: "勝利！王国は救われた。"
+    game_over: "ゲームオーバー。勇者は倒れた。"
+    restart_or_quit: "r で再開、q で終了。"
+  controls:
+    quit: "終了: q"
+    open_settings: "設定: o"
+    exploration:
+      move: "移動: 矢印 / WASD"
+      town: "町メニュー: H 上で t"
+    town:
+      buy: "購入/強化: 1..4"
+      leave: "町を出る: 5"
+    battle:
+      line_1: "1 攻撃, 2 スキル"
+      line_2: "3 防御, 4/5 アイテム"
+      line_3: "6 逃走, q 終了"
+    result:
+      restart: "r リスタート"
+    settings:
+      line_1: "上下キーまたは 1..5: 言語選択"
+      line_2: "Enter: 言語を適用"
+      line_3: "b/Esc: 戻る, q: 終了"
+
+item:
+  weapon:
+    wooden_sword: "木の剣"
+    bronze_sword: "青銅の剣"
+    knight_sword: "ナイトソード"
+  armor:
+    cloth_armor: "布の服"
+    chain_armor: "チェインアーマー"
+    steel_armor: "スチールアーマー"
+
+enemy:
+  slime: "スライム"
+  goblin: "ゴブリン"
+  wolf: "ウルフ"
+  skeleton: "スケルトン"
+  orc_brute: "オークブルート"
+  ancient_dragon: "古代ドラゴン"
+
+log:
+  game:
+    welcome: "ようこそ勇者。X（古代ドラゴン）を倒せ。"
+    town_hint: "町: 1 ポーション, 2 エーテル, 3 武器, 4 防具, 5 出る。"
+    player_fallen_restart: "倒れてしまった。r で再開。"
+    dragon_defeated_restart_or_quit: "ドラゴンを倒した。q で終了、r で再開。"
+  settings:
+    opened: "設定画面を開いた。"
+    language_changed: "言語を %{lang} に切り替えた。"
+  town:
+    menu_opened: "町メニューを開いた。"
+    arrived_restore: "町に到着。HP/MPが回復した。"
+    not_enough_gold_potion: "ポーション(10G)を買うお金が足りない。"
+    bought_potion: "ポーション x%{count} を購入。"
+    not_enough_gold_ether: "エーテル(12G)を買うお金が足りない。"
+    bought_ether: "エーテル x%{count} を購入。"
+    weapon_max: "武器はすでに最大強化。"
+    weapon_upgrade_unavailable: "今は武器を強化できない。"
+    need_more_gold_weapon: "武器強化には %{cost}G 必要。"
+    weapon_upgraded: "武器を %{weapon} に強化した。"
+    armor_max: "防具はすでに最大強化。"
+    armor_upgrade_unavailable: "今は防具を強化できない。"
+    need_more_gold_armor: "防具強化には %{cost}G 必要。"
+    armor_upgraded: "防具を %{armor} に強化した。"
+    leaving: "町を出る。"
+  battle:
+    wild_appears: "野生の %{enemy} が現れた！"
+    boss_blocks_path: "%{enemy} が行く手を阻んだ！"
+    player_slash: "%{enemy} に %{dmg} ダメージを与えた。"
+    not_enough_mp_fire_slash: "ファイアスラッシュのMPが足りない。"
+    fire_slash: "ファイアスラッシュ！%{enemy} に %{dmg} ダメージ。"
+    brace: "身構えた。"
+    escape_success: "うまく逃げ切った。"
+    escape_failed: "逃走失敗。"
+    enemy_hit: "%{enemy} の攻撃！%{dmg} ダメージ。"
+  item:
+    no_potion: "ポーションがない。"
+    hp_full: "HPはすでに満タン。"
+    potion_used: "ポーション使用。HP %{before} -> %{after}。"
+    no_ether: "エーテルがない。"
+    mp_full: "MPはすでに満タン。"
+    ether_used: "エーテル使用。MP %{before} -> %{after}。"
+  progression:
+    defeated_reward: "%{enemy} を倒した。+%{exp} EXP, +%{gold} G。"
+    level_up: "レベルアップ！Lv %{level} になった。"
+  event:
+    gold_cache: "隠し財宝を発見: +%{gold} G。"
+    potion_stash: "ポーション x%{count} を見つけた。"
+    ether_stash: "エーテル x%{count} を見つけた。"
+    campfire_heal: "焚き火で回復: HP %{before} -> %{after}。"
+    spike_trap_deadly: "トゲ罠で %{dmg} ダメージ。"
+    spike_trap: "トゲ罠で %{dmg} ダメージ。"

@@ -1,0 +1,10 @@
+[package]
+name = "rpg-tui"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+ratatui = "0.30"
+crossterm = "0.29"
+rand = "0.9"
+rust-i18n = "3"

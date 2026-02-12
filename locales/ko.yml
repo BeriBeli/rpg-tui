@@ -1,0 +1,147 @@
+ui:
+  panel:
+    world: "월드"
+    hero: "용사"
+    battle_log: "전투 로그"
+    controls: "조작"
+    adventure: "모험"
+    town: "마을"
+    battle: "전투"
+    result: "결과"
+    settings: "설정"
+  stats:
+    level: "Lv"
+    hp: "HP"
+    mp: "MP"
+    atk: "공격"
+    def: "방어"
+    weapon: "무기"
+    armor: "방어구"
+    exp: "EXP"
+    gold: "골드"
+    bag: "가방"
+    potion_short: "P"
+    ether_short: "E"
+  log:
+    no_events: "아직 이벤트가 없습니다."
+  exploration:
+    tip_1: "세계를 탐험하세요. H=마을, X=드래곤 둥지."
+    tip_2: "방향키/WASD로 이동. 바닥에서 전투나 이벤트가 발생할 수 있습니다."
+    tip_3: "H 위에서 t 를 눌러 마을 메뉴를 엽니다."
+  town:
+    shop_title: "마을 상점"
+    shop_line_1: "1 포션 (10G)   2 에테르 (12G)"
+    weapon_upgrade: "3 무기 강화:"
+    armor_upgrade: "4 방어구 강화:"
+    leave: "5 마을 나가기"
+    offer_with_cost: "%{name} (%{cost}G)"
+  common:
+    max: "최대"
+  settings:
+    title: "언어 설정"
+    tip: "위/아래 또는 1..5 선택, Enter 적용, b/Esc 돌아가기."
+    current: "(현재)"
+    lang_en: "English"
+    lang_zh_cn: "简体中文"
+    lang_zh_tw: "繁體中文"
+    lang_ja: "日本語"
+    lang_ko: "한국어"
+  battle:
+    encounter: "조우: %{enemy}"
+    enemy_hp: "적 HP"
+    action_line_1: "1 공격  2 파이어 슬래시(-4 MP)  3 방어"
+    action_line_2: "4 포션  5 에테르               6 도주"
+  result:
+    victory: "승리! 왕국이 구원되었습니다."
+    game_over: "게임 오버. 용사가 쓰러졌습니다."
+    restart_or_quit: "r 재시작, q 종료."
+  controls:
+    quit: "종료: q"
+    open_settings: "설정: o"
+    exploration:
+      move: "이동: 방향키 / WASD"
+      town: "마을 메뉴: H 위에서 t"
+    town:
+      buy: "구매/강화: 1..4"
+      leave: "마을 나가기: 5"
+    battle:
+      line_1: "1 공격, 2 스킬"
+      line_2: "3 방어, 4/5 아이템"
+      line_3: "6 도주, q 종료"
+    result:
+      restart: "r 재시작"
+    settings:
+      line_1: "위/아래 또는 1..5: 언어 선택"
+      line_2: "Enter: 언어 적용"
+      line_3: "b/Esc: 돌아가기, q: 종료"
+
+item:
+  weapon:
+    wooden_sword: "나무 검"
+    bronze_sword: "청동 검"
+    knight_sword: "기사 검"
+  armor:
+    cloth_armor: "천 갑옷"
+    chain_armor: "사슬 갑옷"
+    steel_armor: "강철 갑옷"
+
+enemy:
+  slime: "슬라임"
+  goblin: "고블린"
+  wolf: "늑대"
+  skeleton: "스켈레톤"
+  orc_brute: "오크 브루트"
+  ancient_dragon: "고대 드래곤"
+
+log:
+  game:
+    welcome: "환영합니다, 용사여. X(고대 드래곤)를 쓰러뜨리세요."
+    town_hint: "마을: 1 포션, 2 에테르, 3 무기, 4 방어구, 5 나가기."
+    player_fallen_restart: "쓰러졌습니다. r 을 눌러 다시 시작하세요."
+    dragon_defeated_restart_or_quit: "드래곤을 처치했습니다. q 종료, r 재시작."
+  settings:
+    opened: "설정 화면을 열었습니다."
+    language_changed: "언어를 %{lang}(으)로 변경했습니다."
+  town:
+    menu_opened: "마을 메뉴를 열었습니다."
+    arrived_restore: "마을에 도착했습니다. HP/MP가 회복되었습니다."
+    not_enough_gold_potion: "포션(10G)을 사기에 골드가 부족합니다."
+    bought_potion: "포션 x%{count} 구매."
+    not_enough_gold_ether: "에테르(12G)를 사기에 골드가 부족합니다."
+    bought_ether: "에테르 x%{count} 구매."
+    weapon_max: "무기는 이미 최고 단계입니다."
+    weapon_upgrade_unavailable: "지금은 무기를 강화할 수 없습니다."
+    need_more_gold_weapon: "무기 강화에는 %{cost}G가 필요합니다."
+    weapon_upgraded: "무기를 %{weapon}(으)로 강화했습니다."
+    armor_max: "방어구는 이미 최고 단계입니다."
+    armor_upgrade_unavailable: "지금은 방어구를 강화할 수 없습니다."
+    need_more_gold_armor: "방어구 강화에는 %{cost}G가 필요합니다."
+    armor_upgraded: "방어구를 %{armor}(으)로 강화했습니다."
+    leaving: "마을을 떠납니다."
+  battle:
+    wild_appears: "야생의 %{enemy} 이(가) 나타났다!"
+    boss_blocks_path: "%{enemy} 이(가) 길을 막아섰다!"
+    player_slash: "%{enemy} 에게 %{dmg} 피해를 주었다."
+    not_enough_mp_fire_slash: "파이어 슬래시를 쓰기엔 MP가 부족합니다."
+    fire_slash: "파이어 슬래시! %{enemy} 에게 %{dmg} 피해."
+    brace: "방어 태세를 취했습니다."
+    escape_success: "무사히 도망쳤습니다."
+    escape_failed: "도주 실패."
+    enemy_hit: "%{enemy} 의 공격! %{dmg} 피해."
+  item:
+    no_potion: "포션이 없습니다."
+    hp_full: "HP가 이미 가득 찼습니다."
+    potion_used: "포션 사용. HP %{before} -> %{after}."
+    no_ether: "에테르가 없습니다."
+    mp_full: "MP가 이미 가득 찼습니다."
+    ether_used: "에테르 사용. MP %{before} -> %{after}."
+  progression:
+    defeated_reward: "%{enemy} 처치. +%{exp} EXP, +%{gold} G."
+    level_up: "레벨 업! 이제 Lv %{level}."
+  event:
+    gold_cache: "숨겨진 금고 발견: +%{gold} G."
+    potion_stash: "포션 x%{count} 획득."
+    ether_stash: "에테르 x%{count} 획득."
+    campfire_heal: "모닥불로 회복: HP %{before} -> %{after}."
+    spike_trap_deadly: "가시 함정으로 %{dmg} 피해."
+    spike_trap: "가시 함정으로 %{dmg} 피해."

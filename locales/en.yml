@@ -1,0 +1,147 @@
+ui:
+  panel:
+    world: "World"
+    hero: "Hero"
+    battle_log: "Battle Log"
+    controls: "Controls"
+    adventure: "Adventure"
+    town: "Town"
+    battle: "Battle"
+    result: "Result"
+    settings: "Settings"
+  stats:
+    level: "Lv"
+    hp: "HP"
+    mp: "MP"
+    atk: "ATK"
+    def: "DEF"
+    weapon: "WPN"
+    armor: "ARM"
+    exp: "EXP"
+    gold: "Gold"
+    bag: "Bag"
+    potion_short: "P"
+    ether_short: "E"
+  log:
+    no_events: "No events yet."
+  exploration:
+    tip_1: "Explore the world. H = town, X = dragon lair."
+    tip_2: "Move with arrows/WASD. Floors may trigger battles or events."
+    tip_3: "Press t while on H to open town menu."
+  town:
+    shop_title: "Town Shop"
+    shop_line_1: "1 Potion (10G)   2 Ether (12G)"
+    weapon_upgrade: "3 Weapon Upgrade:"
+    armor_upgrade: "4 Armor Upgrade:"
+    leave: "5 Leave town"
+    offer_with_cost: "%{name} (%{cost}G)"
+  common:
+    max: "MAX"
+  settings:
+    title: "Language"
+    tip: "Use up/down (or 1..5), Enter to apply, b/Esc to return."
+    current: "(current)"
+    lang_en: "English"
+    lang_zh_cn: "Simplified Chinese"
+    lang_zh_tw: "Traditional Chinese"
+    lang_ja: "Japanese"
+    lang_ko: "Korean"
+  battle:
+    encounter: "Encounter: %{enemy}"
+    enemy_hp: "Enemy HP"
+    action_line_1: "1 Attack  2 Fire Slash(-4 MP)  3 Defend"
+    action_line_2: "4 Potion  5 Ether              6 Run"
+  result:
+    victory: "Victory! The kingdom is safe."
+    game_over: "Game Over. The hero has fallen."
+    restart_or_quit: "Press r to restart or q to quit."
+  controls:
+    quit: "Quit: q"
+    open_settings: "Settings: o"
+    exploration:
+      move: "Move: arrows / WASD"
+      town: "Town menu: t on H"
+    town:
+      buy: "Buy/Upgrade: 1..4"
+      leave: "Leave town: 5"
+    battle:
+      line_1: "1 Attack, 2 Skill"
+      line_2: "3 Defend, 4/5 Item"
+      line_3: "6 Run, q Quit"
+    result:
+      restart: "r Restart"
+    settings:
+      line_1: "Up/Down or 1..5: select language"
+      line_2: "Enter: apply language"
+      line_3: "b/Esc: back, q: quit"
+
+item:
+  weapon:
+    wooden_sword: "Wooden Sword"
+    bronze_sword: "Bronze Sword"
+    knight_sword: "Knight Sword"
+  armor:
+    cloth_armor: "Cloth Armor"
+    chain_armor: "Chain Armor"
+    steel_armor: "Steel Armor"
+
+enemy:
+  slime: "Slime"
+  goblin: "Goblin"
+  wolf: "Wolf"
+  skeleton: "Skeleton"
+  orc_brute: "Orc Brute"
+  ancient_dragon: "Ancient Dragon"
+
+log:
+  game:
+    welcome: "Welcome, hero. Defeat X (Ancient Dragon)."
+    town_hint: "Town: 1 Potion, 2 Ether, 3 Weapon, 4 Armor, 5 Leave."
+    player_fallen_restart: "You have fallen. Press r to restart."
+    dragon_defeated_restart_or_quit: "The dragon is defeated. Press q to quit, r to restart."
+  settings:
+    opened: "Settings opened."
+    language_changed: "Language switched to %{lang}."
+  town:
+    menu_opened: "Town menu opened."
+    arrived_restore: "Arrived at town. HP/MP restored."
+    not_enough_gold_potion: "Not enough gold for Potion (10G)."
+    bought_potion: "Bought Potion x%{count}."
+    not_enough_gold_ether: "Not enough gold for Ether (12G)."
+    bought_ether: "Bought Ether x%{count}."
+    weapon_max: "Weapon already at max tier."
+    weapon_upgrade_unavailable: "Cannot upgrade weapon now."
+    need_more_gold_weapon: "Need %{cost}G for weapon upgrade."
+    weapon_upgraded: "Weapon upgraded to %{weapon}."
+    armor_max: "Armor already at max tier."
+    armor_upgrade_unavailable: "Cannot upgrade armor now."
+    need_more_gold_armor: "Need %{cost}G for armor upgrade."
+    armor_upgraded: "Armor upgraded to %{armor}."
+    leaving: "Leaving town."
+  battle:
+    wild_appears: "A wild %{enemy} appears!"
+    boss_blocks_path: "%{enemy} blocks your path!"
+    player_slash: "You slash %{enemy} for %{dmg}."
+    not_enough_mp_fire_slash: "Not enough MP for Fire Slash."
+    fire_slash: "Fire Slash deals %{dmg} to %{enemy}."
+    brace: "You brace for impact."
+    escape_success: "You escaped safely."
+    escape_failed: "Escape failed."
+    enemy_hit: "%{enemy} hits you for %{dmg}."
+  item:
+    no_potion: "No Potion left."
+    hp_full: "HP is already full."
+    potion_used: "Potion used. HP %{before} -> %{after}."
+    no_ether: "No Ether left."
+    mp_full: "MP is already full."
+    ether_used: "Ether used. MP %{before} -> %{after}."
+  progression:
+    defeated_reward: "Defeated %{enemy}. +%{exp} EXP, +%{gold} G."
+    level_up: "Level up! You are now Lv %{level}."
+  event:
+    gold_cache: "You discover a hidden cache: +%{gold} G."
+    potion_stash: "You found Potion x%{count}."
+    ether_stash: "You found Ether x%{count}."
+    campfire_heal: "A calm campfire restores HP: %{before} -> %{after}."
+    spike_trap_deadly: "A spike trap deals %{dmg}."
+    spike_trap: "A spike trap deals %{dmg} damage."
