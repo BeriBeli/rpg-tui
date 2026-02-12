@@ -37,11 +37,17 @@ pub fn render_stats(frame: &mut Frame, game: &Game, area: Rect, requested_scroll
             label_span(t!("ui.stats.gold").to_string()),
             value_span(game.player.gold.to_string(), Color::Rgb(255, 213, 124)),
             Span::raw("  "),
-            label_span(t!("ui.stats.potion_short").to_string()),
-            value_span(game.player.bag.potion.to_string(), TEXT),
-            Span::raw("  "),
-            label_span(t!("ui.stats.ether_short").to_string()),
-            value_span(game.player.bag.ether.to_string(), TEXT),
+            label_span(t!("ui.stats.bag").to_string()),
+            value_span(
+                format!(
+                    "{}:{}  {}:{}",
+                    t!("ui.stats.potion_short"),
+                    game.player.bag.potion,
+                    t!("ui.stats.ether_short"),
+                    game.player.bag.ether
+                ),
+                TEXT,
+            ),
         ]),
         meter_line(
             t!("ui.stats.hp").to_string(),
@@ -67,6 +73,19 @@ pub fn render_stats(frame: &mut Frame, game: &Game, area: Rect, requested_scroll
             label_span(t!("ui.stats.def").to_string()),
             value_span(
                 game.player.total_def().to_string(),
+                Color::Rgb(139, 215, 161),
+            ),
+        ]),
+        Line::from(vec![
+            label_span(t!("ui.stats.weapon").to_string()),
+            value_span(
+                t!(game.player.equipment.weapon.i18n_key()).to_string(),
+                Color::Rgb(255, 170, 110),
+            ),
+            Span::raw("  "),
+            label_span(t!("ui.stats.armor").to_string()),
+            value_span(
+                t!(game.player.equipment.armor.i18n_key()).to_string(),
                 Color::Rgb(139, 215, 161),
             ),
         ]),
@@ -138,6 +157,7 @@ fn control_lines(mode: GameMode) -> Vec<Line<'static>> {
         GameMode::Exploration => vec![
             t!("ui.controls.exploration.move").to_string(),
             t!("ui.controls.exploration.town").to_string(),
+            t!("ui.controls.open_settings").to_string(),
             t!("ui.controls.save_load").to_string(),
             t!("ui.controls.quit").to_string(),
         ],
@@ -146,6 +166,7 @@ fn control_lines(mode: GameMode) -> Vec<Line<'static>> {
             t!("ui.controls.town.service").to_string(),
             t!("ui.controls.town.leave").to_string(),
             t!("ui.controls.menu_select").to_string(),
+            t!("ui.controls.open_settings").to_string(),
             t!("ui.controls.save_load").to_string(),
         ],
         GameMode::Settings => vec![
